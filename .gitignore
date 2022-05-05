@@ -16,6 +16,12 @@
 # Mono auto generated files
 mono_crash.*
 
+# External Libraries
+/VulkanRenderer/extern
+
+# Shader Object Files
+/VulkanRenderer/shaders
+
 # Build results
 [Dd]ebug/
 [Dd]ebugPublic/

@@ -21,13 +21,13 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
@@ -55,7 +55,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;WIN32_LEAN_AND_MEAN;NOMINMAX;_CRT_SECURE_NO_WARNINGS;GLFW_EXPOSE_NATIVE_WIN32;VK_USE_PLATFORM_WIN32_KHR;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>D:\Developer\Libraries\glfw-3.3.2.bin.WIN64\include;D:\Developer\Libraries\glm-0.9.9.8\glm;$(VULKAN_SDK)\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)extern\meshoptimizer\src;$(ProjectDir)extern\objParser;$(ProjectDir)extern\tinyobjloader;$(ProjectDir)extern\stb;$(ProjectDir)extern\volk;$(ProjectDir)extern\glfw;$(ProjectDir)extern\glm;$(VULKAN_SDK)\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -82,7 +82,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32_LEAN_AND_MEAN;NOMINMAX;_CRT_SECURE_NO_WARNINGS;GLFW_EXPOSE_NATIVE_WIN32;VK_USE_PLATFORM_WIN32_KHR;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>D:\Developer\Libraries\glfw-3.3.2.bin.WIN64\include;D:\Developer\Libraries\glm-0.9.9.8\glm;$(VULKAN_SDK)\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)extern\meshoptimizer\src;$(ProjectDir)extern\objParser;$(ProjectDir)extern\tinyobjloader;$(ProjectDir)extern\stb;$(ProjectDir)extern\volk;$(ProjectDir)extern\glfw;$(ProjectDir)extern\glm;$(VULKAN_SDK)\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -124,17 +124,48 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="extern\meshoptimizer\src\allocator.cpp" />
+    <ClCompile Include="extern\meshoptimizer\src\clusterizer.cpp" />
+    <ClCompile Include="extern\meshoptimizer\src\indexcodec.cpp" />
+    <ClCompile Include="extern\meshoptimizer\src\indexgenerator.cpp" />
+    <ClCompile Include="extern\meshoptimizer\src\objparser.cpp" />
+    <ClCompile Include="extern\meshoptimizer\src\overdrawanalyzer.cpp" />
+    <ClCompile Include="extern\meshoptimizer\src\overdrawoptimizer.cpp" />
+    <ClCompile Include="extern\meshoptimizer\src\simplifier.cpp" />
+    <ClCompile Include="extern\meshoptimizer\src\spatialorder.cpp" />
+    <ClCompile Include="extern\meshoptimizer\src\stripifier.cpp" />
+    <ClCompile Include="extern\meshoptimizer\src\vcacheanalyzer.cpp" />
+    <ClCompile Include="extern\meshoptimizer\src\vcacheoptimizer.cpp" />
+    <ClCompile Include="extern\meshoptimizer\src\vertexcodec.cpp" />
+    <ClCompile Include="extern\meshoptimizer\src\vertexfilter.cpp" />
+    <ClCompile Include="extern\meshoptimizer\src\vfetchanalyzer.cpp" />
+    <ClCompile Include="extern\meshoptimizer\src\vfetchoptimizer.cpp" />
+    <ClCompile Include="extern\volk\volk.c" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="src\shaders\triangle.frag">
+    <CustomBuild Include="src\shaders\mesh.vert.glsl">
       <FileType>Document</FileType>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(VULKAN_SDK)\Bin\glslc -c %(FullPath) -o shaders/%(Filename).spv</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">shaders/$(Filename).spv</Outputs>
-    </None>
-    <None Include="src\shaders\triangle.vert">
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(VULKAN_SDK)\Bin\glslangValidator %(FullPath) -V -o shaders\%(Filename).spv
+</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">%(FullPath)</AdditionalInputs>
+      <BuildInParallel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</BuildInParallel>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">shaders\%(Filename).spv</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="src\shaders\triangle.frag.glsl">
       <FileType>Document</FileType>
-    </None>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(VULKAN_SDK)\Bin\glslangValidator %(FullPath) -V -o shaders\%(Filename).spv
+</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">%(FullPath)</AdditionalInputs>
+      <BuildInParallel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</BuildInParallel>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">shaders\%(Filename).spv</Outputs>
+    </CustomBuild>
+    <None Include="src\shaders\triangle.vert.glsl" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="extern\meshoptimizer\src\meshoptimizer.h" />
+    <ClInclude Include="extern\meshoptimizer\src\objparser.h" />
+    <ClInclude Include="extern\volk\volk.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
